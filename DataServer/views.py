@@ -6,25 +6,42 @@ from django.db import models
 from DataServer.models import User
 # Create your views here.
 def logindb(request):
-    
-     conn2 = cx_Oracle.connect('BJYJY', 'abc@123', '10.10.31.115:1521/orcl')
-    #
-     cursor2 = conn2.cursor()
-    #
-     cursor2.execute('select * from OLE_DB.CT_STANDARD_BEST')
-     result = cursor2.fetchall()
-    #
-     print(cursor2.rowcount)
-    #
-     print(result[6][1])
-     for i in range(cursor2.rowcount):
-         print(result[i])
-    #
-     cursor2.close()
-    #
-     conn2.close()
 
-     return HttpResponse("nihao2...")
+    data =json.loads(request.body)
+    #print(data['data1'])
+    data_test= {"data1": " ",
+                "data2": {"data": []
+                         }
+                }
+    data_to_send={"status": "400", "msg": "No User", "data": "null" }
+    print(data)
+    conn2 = cx_Oracle.connect('BJYJY', 'abc@123', '10.10.31.115:1521/orcl')
+    #
+    cursor2 = conn2.cursor()
+    #
+    #cursor2.execute('select * from OLE_DB.CT_STANDARD_BEST')
+    cursor2.execute('select * from OLE_DB.RPT_LINE_DAILY_L')
+    result = cursor2.fetchmany(6)
+    #
+    print(cursor2.rowcount)
+    #
+    print(result)
+    a=[1,2,3,4,5]
+    data_test = {"data1": " ",
+                 "data2": {"data": a
+                          }
+                 }
+    data_to_send['data']=a
+
+    for i in range(6):
+        print(result[i])
+    #
+    cursor2.close()
+    #
+    conn2.close()
+
+    return HttpResponse(json.dumps(data_to_send))
+    #return HttpResponse(json.dumps(data_test))
 
 def login(req):
     Method = req.method
