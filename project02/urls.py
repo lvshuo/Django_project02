@@ -24,4 +24,5 @@ urlpatterns = [
     path('login/', views.login),
     path('dbreadrest/', dbreadrest.as_view()),
     path('dbreadrest01/',dbreadrest01.as_view()),
+
 ]
