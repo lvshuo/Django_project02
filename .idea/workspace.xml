@@ -2,10 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="89d43ec2-db6c-4505-8c65-a6a72322e814" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c0286a04-8615-437a-9cb4-2a8202fe6fe3.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c0286a04-8615-437a-9cb4-2a8202fe6fe3.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/c0286a04-8615-437a-9cb4-2a8202fe6fe3/storage_v2/_src_/schema/BJYJY.IArFAw.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/c0286a04-8615-437a-9cb4-2a8202fe6fe3/storage_v2/_src_/schema/BJYJY.IArFAw.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/DataServer/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/DataServer/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/project02/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/project02/urls.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -103,8 +101,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/DataServer/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="430">
-              <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+            <state relative-caret-position="1522">
+              <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -124,8 +122,8 @@
       <file leaf-file-name="urls.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/project02/urls.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="405">
-              <caret line="23" column="32" lean-forward="true" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+            <state relative-caret-position="455">
+              <caret line="25" column="49" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
               <folding>
                 <element signature="e#633#665#0" expanded="true" />
               </folding>
@@ -150,8 +148,8 @@
       <list>
         <option value="$PROJECT_DIR$/DataServer/models.py" />
         <option value="$PROJECT_DIR$/DataServer/admin.py" />
-        <option value="$PROJECT_DIR$/project02/urls.py" />
         <option value="$PROJECT_DIR$/project02/settings.py" />
+        <option value="$PROJECT_DIR$/project02/urls.py" />
         <option value="$PROJECT_DIR$/DataServer/views.py" />
       </list>
     </option>
@@ -273,7 +271,7 @@
       <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Python Console" order="7" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.49126637" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3209607" />
       <window_info anchor="bottom" id="Terminal" order="7" weight="0.24972737" />
       <window_info anchor="bottom" id="Database Console" weight="0.3293348" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.16666667" />
@@ -381,23 +379,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/DataServer/migrations/0001_initial.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/project02/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="23" column="32" lean-forward="true" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+        <state relative-caret-position="455">
+          <caret line="25" column="49" selection-start-line="25" selection-start-column="49" selection-end-line="25" selection-end-column="49" />
           <folding>
             <element signature="e#633#665#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DataServer/migrations/0001_initial.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/DataServer/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="430">
-          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+        <state relative-caret-position="1522">
+          <caret line="89" lean-forward="true" selection-start-line="89" selection-end-line="89" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>

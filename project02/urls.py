@@ -15,11 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from DataServer.views import logindb
+from DataServer.views import logindb ,dbreadrest,dbreadrest01
 from DataServer import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('logindb/', views.logindb),
     path('login/', views.login),
+    path('dbreadrest/', dbreadrest.as_view()),
+    path('dbreadrest01/',dbreadrest01.as_view()),
 ]

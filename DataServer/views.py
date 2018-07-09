@@ -4,7 +4,52 @@ import cx_Oracle
 import json
 from django.db import models
 from DataServer.models import User
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.authentication import BaseAuthentication
+from rest_framework.request import Request
+from rest_framework import exceptions
+
 # Create your views here.
+class dbreadrest(APIView):
+   # authentication_classes = [TestAuthentication, ]
+    #permission_classes = []
+
+    def get(self, request, *args, **kwargs):
+        print(request.user)
+        print(request.auth)
+        return Response('GET请求，响应内容')
+
+    def post(self, request, *args, **kwargs):
+        data_to_send = {"status": "400", "msg": "No User", "data": "null"}
+        a = [1, 2, 3, 4, 5]
+        data_to_send['data'] = a
+        return HttpResponse(json.dumps(data_to_send))
+        #return Response('POST请求，响应内容')
+
+    def put(self, request, *args, **kwargs):
+        return Response('PUT请求，响应内容')
+
+class dbreadrest01(APIView):
+   # authentication_classes = [TestAuthentication, ]
+    #permission_classes = []
+
+    def get(self, request, *args, **kwargs):
+        print(request.user)
+        print(request.auth)
+        return Response('GET请求，响应内容')
+
+    def post(self, request, *args, **kwargs):
+        data_to_send = {"status": "400", "msg": "No User", "data": "null"}
+        a = [1, 2, 3, 4, 8]
+        data_to_send['data'] = a
+        #return HttpResponse(json.dumps(data_to_send))
+        return Response(data_to_send)
+        #return Response('POST请求，响应内容')
+
+    def put(self, request, *args, **kwargs):
+        return Response('PUT请求，响应内容')
 def logindb(request):
 
     data =json.loads(request.body)
