@@ -95,50 +95,62 @@ def logindb(request):
     #               )
 
     try:
-        cursor2.execute("select CIRCLE_LOSS  from OLE_DB.RPT_LINE_DAILY_L where WORK_DATE  between TO_DATE(:START_TIME, 'YYYY-MM-DD') and TO_DATE(:END_TIME, 'YYYY-MM-DD') "
+        cursor2.execute("select *  from OLE_DB.RPT_LINE_DAILY_L where WORK_DATE  between TO_DATE(:START_TIME, 'YYYY-MM-DD') and TO_DATE(:END_TIME, 'YYYY-MM-DD') "
                      "AND ORG_CODE = :ORG_CODE"
                      " AND PROJECT_ID = :PROJECT_ID"                  
                      " AND IS_STANDARD = :IS_STANDARD "
-                     "AND  SERIES = :SERIES"
-                     " AND LINE_CODE = :LINE_CODE", data
+                     " AND LINE_CODE = :LINE_CODE" , data
                      )
 
-
     except cx_Oracle.DatabaseError as e:
         res = {"status": "400", "msg": "No Data", "data": "null"}
         return HttpResponse(json.dumps(res))
-
-    try:
-        cursor2.execute(
-            "select LINE_END_LOSS  from OLE_DB.RPT_LINE_DAILY_L where WORK_DATE  between TO_DATE(:START_TIME, 'YYYY-MM-DD') and TO_DATE(:END_TIME, 'YYYY-MM-DD') "
-            "AND ORG_CODE = :ORG_CODE"
-            " AND PROJECT_ID = :PROJECT_ID"
-            " AND IS_STANDARD = :IS_STANDARD "
-            "AND  SERIES = :SERIES"
-            " AND LINE_CODE = :LINE_CODE", data
-        )
-
-    except cx_Oracle.DatabaseError as e:
-        res = {"status": "400", "msg": "No Data", "data": "null"}
-        return HttpResponse(json.dumps(res))
-
-    #    "AND PN_CODE ='TRACKERX' "  PRODUCT_OUT_QTY  (condition_project["PROJECT_ID"], condition_project["SHIFT_TYPE"], condition_project["IS_STANDARD"]
-    #cursor2.execute("select * from OLE_DB.RPT_LINE_DAILY_L where  date_format(WORK_DATE ,'%Y-%m-%d') ='2018-07-06'")    " AND SHIFT_TYPE = :SHIFT_TYPE "
+    #print(cursor2.fetchall())
     result = cursor2.fetchall()
+    print(cursor2.rowcount)
+    print(result)
+    #print(result1[0][15],result1[1][15])
+    CIRCLE_LOSS_SUM = 0
+    LINE_END_LOSS_SUM =0
+    FIRT_PRODUCT_LOSS_SUM =0
+    CHANGE_PN_LOSS_SUM =0
+    CHANGE_WO_LOSS_SUM =0
+    FAULT_LOSS_SUM =0
+    SUM_CT_SUM=0
+
+    print(result[0][28])
+    for i in range(cursor2.rowcount):
+        CIRCLE_LOSS_SUM       +=result[i][15]  #节怕损失
+        LINE_END_LOSS_SUM     +=result[i][16]  #收线损失
+        FIRT_PRODUCT_LOSS_SUM +=result[i][17]  #首件损失
+        CHANGE_PN_LOSS_SUM    +=result[i][18]  #切线损失
+        CHANGE_WO_LOSS_SUM    +=result[i][19]  #换工单损失
+        FAULT_LOSS_SUM        +=result[i][20]  #故障损失
+        SUM_CT_SUM            +=result[i][28]  #总时间
+    #print(CIRCLE_LOSS_SUM,LINE_END_LOSS_SUM,FIRT_PRODUCT_LOSS_SUM,CHANGE_PN_LOSS_SUM,CHANGE_WO_LOSS_SUM,FAULT_LOSS_SUM,SUM_CT_SUM)
+
+    ####  计算效率
+
+    CIRCLE_LOSS_EFFICIENCY = round((CIRCLE_LOSS_SUM/SUM_CT_SUM)*100,2)
+    LINE_END_LOSS_EFFICIENCY = round((LINE_END_LOSS_SUM/SUM_CT_SUM)*100,2)
+    FIRT_PRODUCT_LOSS_EFFICIENCY = round((FIRT_PRODUCT_LOSS_SUM/SUM_CT_SUM)*100,2)
+    CHANGE_PN_LOSS_EFFICIENCY = round((CHANGE_PN_LOSS_SUM/SUM_CT_SUM)*100,2)
+    CHANGE_WO_LOSS_EFFICIENCY = round((CHANGE_WO_LOSS_SUM/SUM_CT_SUM)*100,2)
+    FAULT_LOSS_EFFICIENCY =round((FAULT_LOSS_SUM/SUM_CT_SUM)*100,2)
+
+    print(CIRCLE_LOSS_EFFICIENCY,LINE_END_LOSS_EFFICIENCY,FIRT_PRODUCT_LOSS_EFFICIENCY,CHANGE_PN_LOSS_EFFICIENCY,CHANGE_WO_LOSS_EFFICIENCY,FAULT_LOSS_EFFICIENCY)
+
+    #"AND PN_CODE ='TRACKERX' "  PRODUCT_OUT_QTY  (condition_project["PROJECT_ID"], condition_project["SHIFT_TYPE"], condition_project["IS_STANDARD"]
+    #cursor2.execute("select * from OLE_DB.RPT_LINE_DAILY_L where  date_format(WORK_DATE ,'%Y-%m-%d') ='2018-07-06'")    " AND SHIFT_TYPE = :SHIFT_TYPE "
+    #result = cursor2.fetchall()
     #result = cursor2.fetchmany(10)
     #
-   # print(result.rowcount)
+    # print(result.rowcount)
     #
     #print(result)
-    a=[1,2,3,4,5]
-    data_test = {"data1": " ",
-                 "data2": {"data": a
-                          }
-                 }
-    data_to_send['data']=a
+   
 
-    for i in range(cursor2.rowcount):
-        print(result[i])
+
     #
     cursor2.close()
     #
