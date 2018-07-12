@@ -9,6 +9,7 @@
       <case-sensitivity plain-identifiers="upper" quoted-identifiers="exact" />
       <secret-storage>master_key</secret-storage>
       <user-name>BJYJY</user-name>
+      <introspection-schemas>*:BJYJY</introspection-schemas>
     </data-source>
     <data-source name="second_db@localhost" uuid="87cbfede-b977-41d0-9cc9-1a9d8016e169">
       <database-info product="MySQL" version="8.0.11" jdbc-version="4.0" driver-name="MySQL Connector Java" driver-version="mysql-connector-java-5.1.46 ( Revision: 9cc87a48e75c2d2e87c1a293b2862ce651cb256e )">
