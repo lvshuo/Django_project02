@@ -12,15 +12,8 @@ from rest_framework.request import Request
 from rest_framework import exceptions
 import datetime
 from DataServer.database_login import database_login
+
 # Create your views here.
-'''
-  ORG_CODE:
-  
-    63878A393AA041CBB34F30DEDFE2619B  ## 科技园  SMT制造一部
-  
-  PROJECT_ID:
-  
-    ALMOND 
 
 '''
 address = '10.10.31.115:1521/orcl'
@@ -38,8 +31,37 @@ database_temp=my_database_login(address,username,password)
 conn2 = cx_Oracle.connect('BJYJY', 'abc@123', '10.10.31.115:1521/orcl')
 cursor2 = conn2.cursor()
 
+Token_list=[
+    '123456',
+    'abcdef',
+
+]
+def gettoken(request):
+    data_to_send = {"status": "200", "msg": "No User", "data": "null"}
+    token_list={"token0":Token_list[0],"token1":Token_list[1]}
+    token={"token":token_list}
+    data_to_send["msg"]="Token list"
+    data_to_send["data"]=token_list
+    return HttpResponse(json.dumps(data_to_send))
+
+##Token 认证
+class UserAuthview(BaseAuthentication):
+    data_to_send = {"status": "200", "msg": "认证失败", "data": "null"}
+    def authenticate(self, request):
+        tk=request._request.GET.get("token")
+
+        if tk in Token_list:
+            return (tk,None)
+
+        #return HttpResponse(json.dumps({"status": "200", "msg": "认证失败", "data": "null"}))
+        raise exceptions.AuthenticationFailed({"status": "200", "msg": "Authenticate Failed", "data": "null"})
+        #return HttpResponse(json.dumps(data_to_send))
+    def authenticate_header(self, request):
+        pass
+
+
 class dbreadrest(APIView):
-   # authentication_classes = [TestAuthentication, ]
+    authentication_classes = [UserAuthview, ]
     #permission_classes = []
 
     def get(self, request, *args, **kwargs):
@@ -58,6 +80,7 @@ class dbreadrest(APIView):
         return Response('PUT请求，响应内容')
 
 class getdata(APIView):
+    authentication_classes = [UserAuthview, ]
    # authentication_classes = [TestAuthentication, ]
     #permission_classes = []
 
@@ -152,11 +175,30 @@ def logindb(request):
     CHANGE_PN_LOSS_EFFICIENCY = round((CHANGE_PN_LOSS_SUM/SUM_CT_SUM)*100,2)
     CHANGE_WO_LOSS_EFFICIENCY = round((CHANGE_WO_LOSS_SUM/SUM_CT_SUM)*100,2)
     FAULT_LOSS_EFFICIENCY =round((FAULT_LOSS_SUM/SUM_CT_SUM)*100,2)
-    TOTAL_EFFICIENCY=100-(CIRCLE_LOSS_EFFICIENCY + LINE_END_LOSS_EFFICIENCY+FIRT_PRODUCT_LOSS_EFFICIENCY+CHANGE_PN_LOSS_EFFICIENCY+CHANGE_WO_LOSS_EFFICIENCY+FAULT_LOSS_EFFICIENCY)
-    print(CIRCLE_LOSS_EFFICIENCY,LINE_END_LOSS_EFFICIENCY,FIRT_PRODUCT_LOSS_EFFICIENCY,CHANGE_PN_LOSS_EFFICIENCY,CHANGE_WO_LOSS_EFFICIENCY,FAULT_LOSS_EFFICIENCY,TOTAL_EFFICIENCY)
-    data_effiency={"CIRCLE_LOSS_EFFICIENCY":CIRCLE_LOSS_EFFICIENCY,"LINE_END_LOSS_EFFICIENCY":LINE_END_LOSS_EFFICIENCY,"FIRT_PRODUCT_LOSS_EFFICIENCY":FIRT_PRODUCT_LOSS_EFFICIENCY,
-                   "CHANGE_PN_LOSS_EFFICIENCY":CHANGE_PN_LOSS_EFFICIENCY,"CHANGE_WO_LOSS_EFFICIENCY":CHANGE_WO_LOSS_EFFICIENCY,"FAULT_LOSS_EFFICIENCY":FAULT_LOSS_EFFICIENCY,
+    
+    TOTAL_EFFICIENCY=round(100-(CIRCLE_LOSS_EFFICIENCY + 
+                          LINE_END_LOSS_EFFICIENCY+
+                          FIRT_PRODUCT_LOSS_EFFICIENCY+
+                          CHANGE_PN_LOSS_EFFICIENCY+
+                          CHANGE_WO_LOSS_EFFICIENCY+
+                          FAULT_LOSS_EFFICIENCY),2)
+    
+    print(CIRCLE_LOSS_EFFICIENCY,
+          LINE_END_LOSS_EFFICIENCY,
+          FIRT_PRODUCT_LOSS_EFFICIENCY,
+          CHANGE_PN_LOSS_EFFICIENCY,
+          CHANGE_WO_LOSS_EFFICIENCY,
+          FAULT_LOSS_EFFICIENCY,
+          TOTAL_EFFICIENCY)
+    
+    data_effiency={"CIRCLE_LOSS_EFFICIENCY":CIRCLE_LOSS_EFFICIENCY,
+                   "LINE_END_LOSS_EFFICIENCY":LINE_END_LOSS_EFFICIENCY,
+                   "FIRT_PRODUCT_LOSS_EFFICIENCY":FIRT_PRODUCT_LOSS_EFFICIENCY,
+                   "CHANGE_PN_LOSS_EFFICIENCY":CHANGE_PN_LOSS_EFFICIENCY,
+                   "CHANGE_WO_LOSS_EFFICIENCY":CHANGE_WO_LOSS_EFFICIENCY,
+                   "FAULT_LOSS_EFFICIENCY":FAULT_LOSS_EFFICIENCY,
                    "TOTAL_EFFICIENCY":TOTAL_EFFICIENCY}
+    
     #"AND PN_CODE ='TRACKERX' "  PRODUCT_OUT_QTY  (condition_project["PROJECT_ID"], condition_project["SHIFT_TYPE"], condition_project["IS_STANDARD"]
     #cursor2.execute("select * from OLE_DB.RPT_LINE_DAILY_L where  date_format(WORK_DATE ,'%Y-%m-%d') ='2018-07-06'")    " AND SHIFT_TYPE = :SHIFT_TYPE "
     #result = cursor2.fetchall()
