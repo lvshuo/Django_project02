@@ -76,9 +76,12 @@ def logindb(request):
                 }
     data_to_send={"status": "400", "msg": "No User", "data": "null" }
     #print(data)
+    start_time=datetime.datetime.now()
     conn2 = cx_Oracle.connect('BJYJY', 'abc@123', '10.10.31.115:1521/orcl')
     #
     cursor2 = conn2.cursor()
+    end_time = datetime.datetime.now()
+    print(end_time-start_time)
     #
     # cursor2.execute('select * from OLE_DB.CT_STANDARD_BEST')
     # result=cursor2.fetchone()
@@ -93,7 +96,7 @@ def logindb(request):
     #                 "AND SHIFT_TYPE ='DAY' "
     #                 "AND IS_STANDARD = 'Y' "
     #               )
-
+    start_time = datetime.datetime.now()
     try:
         cursor2.execute("select *  from OLE_DB.RPT_LINE_DAILY_L where WORK_DATE  between TO_DATE(:START_TIME, 'YYYY-MM-DD') and TO_DATE(:END_TIME, 'YYYY-MM-DD') "
                      "AND ORG_CODE = :ORG_CODE"
@@ -108,7 +111,11 @@ def logindb(request):
     #print(cursor2.fetchall())
     result = cursor2.fetchall()
     print(cursor2.rowcount)
-    print(result)
+    #print(result)
+    end_time = datetime.datetime.now()
+    print(end_time-start_time)
+
+    start_time =datetime.datetime.now()
     #print(result1[0][15],result1[1][15])
     CIRCLE_LOSS_SUM = 0
     LINE_END_LOSS_SUM =0
@@ -118,7 +125,7 @@ def logindb(request):
     FAULT_LOSS_SUM =0
     SUM_CT_SUM=0
 
-    print(result[0][28])
+    #print(result[0][28])
     for i in range(cursor2.rowcount):
         CIRCLE_LOSS_SUM       +=result[i][15]  #节怕损失
         LINE_END_LOSS_SUM     +=result[i][16]  #收线损失
@@ -137,9 +144,11 @@ def logindb(request):
     CHANGE_PN_LOSS_EFFICIENCY = round((CHANGE_PN_LOSS_SUM/SUM_CT_SUM)*100,2)
     CHANGE_WO_LOSS_EFFICIENCY = round((CHANGE_WO_LOSS_SUM/SUM_CT_SUM)*100,2)
     FAULT_LOSS_EFFICIENCY =round((FAULT_LOSS_SUM/SUM_CT_SUM)*100,2)
-
-    print(CIRCLE_LOSS_EFFICIENCY,LINE_END_LOSS_EFFICIENCY,FIRT_PRODUCT_LOSS_EFFICIENCY,CHANGE_PN_LOSS_EFFICIENCY,CHANGE_WO_LOSS_EFFICIENCY,FAULT_LOSS_EFFICIENCY)
-
+    TOTAL_EFFICIENCY=100-(CIRCLE_LOSS_EFFICIENCY + LINE_END_LOSS_EFFICIENCY+FIRT_PRODUCT_LOSS_EFFICIENCY+CHANGE_PN_LOSS_EFFICIENCY+CHANGE_WO_LOSS_EFFICIENCY+FAULT_LOSS_EFFICIENCY)
+    print(CIRCLE_LOSS_EFFICIENCY,LINE_END_LOSS_EFFICIENCY,FIRT_PRODUCT_LOSS_EFFICIENCY,CHANGE_PN_LOSS_EFFICIENCY,CHANGE_WO_LOSS_EFFICIENCY,FAULT_LOSS_EFFICIENCY,TOTAL_EFFICIENCY)
+    data_effiency={"CIRCLE_LOSS_EFFICIENCY":CIRCLE_LOSS_EFFICIENCY,"LINE_END_LOSS_EFFICIENCY":LINE_END_LOSS_EFFICIENCY,"FIRT_PRODUCT_LOSS_EFFICIENCY":FIRT_PRODUCT_LOSS_EFFICIENCY,
+                   "CHANGE_PN_LOSS_EFFICIENCY":CHANGE_PN_LOSS_EFFICIENCY,"CHANGE_WO_LOSS_EFFICIENCY":CHANGE_WO_LOSS_EFFICIENCY,"FAULT_LOSS_EFFICIENCY":FAULT_LOSS_EFFICIENCY,
+                   "TOTAL_EFFICIENCY":TOTAL_EFFICIENCY}
     #"AND PN_CODE ='TRACKERX' "  PRODUCT_OUT_QTY  (condition_project["PROJECT_ID"], condition_project["SHIFT_TYPE"], condition_project["IS_STANDARD"]
     #cursor2.execute("select * from OLE_DB.RPT_LINE_DAILY_L where  date_format(WORK_DATE ,'%Y-%m-%d') ='2018-07-06'")    " AND SHIFT_TYPE = :SHIFT_TYPE "
     #result = cursor2.fetchall()
@@ -147,9 +156,13 @@ def logindb(request):
     #
     # print(result.rowcount)
     #
+    end_time = datetime.datetime.now()
+    print(end_time-start_time)
     #print(result)
-   
-
+    res = {"status": "400", "msg": "No Data", "data": "null"}
+    data_to_send["status"]="200"
+    data_to_send["msg"] ="Data is ready"
+    data_to_send["data"]=data_effiency
 
     #
     cursor2.close()
