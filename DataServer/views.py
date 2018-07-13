@@ -15,7 +15,7 @@ from DataServer.database_login import database_login
 
 # Create your views here.
 
-'''
+
 address = '10.10.31.115:1521/orcl'
 username = 'BJYJY'
 password = 'abc@123'
