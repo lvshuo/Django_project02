@@ -11,6 +11,7 @@ from rest_framework.authentication import BaseAuthentication
 from rest_framework.request import Request
 from rest_framework import exceptions
 import datetime
+from DataServer.database_login import database_login
 # Create your views here.
 '''
   ORG_CODE:
@@ -22,9 +23,20 @@ import datetime
     ALMOND 
 
 '''
+address = '10.10.31.115:1521/orcl'
+username = 'BJYJY'
+password = 'abc@123'
 
+class my_database_login(database_login):
+    def __init__(self,address,username,password):
+        database_login.__init__(self, address, username, password)
+    def login(self):
+        database_login.login(self)
 
+database_temp=my_database_login(address,username,password)
 
+conn2 = cx_Oracle.connect('BJYJY', 'abc@123', '10.10.31.115:1521/orcl')
+cursor2 = conn2.cursor()
 
 class dbreadrest(APIView):
    # authentication_classes = [TestAuthentication, ]
@@ -77,9 +89,9 @@ def logindb(request):
     data_to_send={"status": "400", "msg": "No User", "data": "null" }
     #print(data)
     start_time=datetime.datetime.now()
-    conn2 = cx_Oracle.connect('BJYJY', 'abc@123', '10.10.31.115:1521/orcl')
+    #conn2 = cx_Oracle.connect('BJYJY', 'abc@123', '10.10.31.115:1521/orcl')
     #
-    cursor2 = conn2.cursor()
+    #cursor2 = conn2.cursor()
     end_time = datetime.datetime.now()
     print(end_time-start_time)
     #
@@ -165,9 +177,9 @@ def logindb(request):
     data_to_send["data"]=data_effiency
 
     #
-    cursor2.close()
+    #cursor2.close()
     #
-    conn2.close()
+    #conn2.close()
 
     return HttpResponse(json.dumps(data_to_send))
     #return HttpResponse(json.dumps(data_test))
