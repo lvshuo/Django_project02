@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from DataServer.views import logindb ,dbreadrest,dbreadrest01
+from DataServer.views import logindb ,dbreadrest,getdata
 from DataServer import views
 
 urlpatterns = [
@@ -23,6 +23,6 @@ urlpatterns = [
     path('logindb/', views.logindb),
     path('login/', views.login),
     path('dbreadrest/', dbreadrest.as_view()),
-    path('dbreadrest01/',dbreadrest01.as_view()),
+    path('getdata/',getdata.as_view()),
 
 ]

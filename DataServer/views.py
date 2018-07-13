@@ -57,7 +57,7 @@ class dbreadrest(APIView):
     def put(self, request, *args, **kwargs):
         return Response('PUT请求，响应内容')
 
-class dbreadrest01(APIView):
+class getdata(APIView):
    # authentication_classes = [TestAuthentication, ]
     #permission_classes = []
 
@@ -67,12 +67,8 @@ class dbreadrest01(APIView):
         return Response('GET请求，响应内容')
 
     def post(self, request, *args, **kwargs):
-        data_to_send = {"status": "400", "msg": "No User", "data": "null"}
-        a = [1, 2, 3, 4, 8]
-        data_to_send['data'] = a
-        #return HttpResponse(json.dumps(data_to_send))
-        return Response(data_to_send)
-        #return Response('POST请求，响应内容')
+        return HttpResponse(logindb(request))
+
 
     def put(self, request, *args, **kwargs):
         return Response('PUT请求，响应内容')
@@ -181,7 +177,8 @@ def logindb(request):
     #
     #conn2.close()
 
-    return HttpResponse(json.dumps(data_to_send))
+   # return HttpResponse(json.dumps(data_to_send))
+    return json.dumps(data_to_send)
     #return HttpResponse(json.dumps(data_test))
 
 def login(req):
