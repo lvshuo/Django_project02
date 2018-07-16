@@ -90,11 +90,77 @@ class getdata(APIView):
         return Response('GET请求，响应内容')
 
     def post(self, request, *args, **kwargs):
-        return HttpResponse(logindb(request))
+        for i in range(2):
+            return HttpResponse(logindb(request))
 
 
     def put(self, request, *args, **kwargs):
         return Response('PUT请求，响应内容')
+
+class getlist(APIView):
+    authentication_classes = [UserAuthview, ]
+
+    def get(self, request, *args, **kwargs):
+        print(request.user)
+        print(request.auth)
+        return Response('GET请求，响应内容')
+
+    def post(self, request, *args, **kwargs):
+        #get_project_list(request)
+        return HttpResponse(get_project_list(request))
+
+    def put(self, request, *args, **kwargs):
+        return Response('PUT请求，响应内容')
+
+def get_project_list(request):
+
+    data=json.loads(request.body)
+    print(data)
+    try:
+        cursor2.execute(
+            'select ORG_CODE from OLE_DB.BASE_PROJECT  where SERIES=:SERIES'
+            ' AND AREA_NAME = :AREA_NAME  ',data
+            )
+    except cx_Oracle.DatabaseError as e:
+        res = {"status": "400", "msg": "No Data", "data": "null"}
+        return json.dumps(res)
+
+    #print(cursor2.fetchall())
+    result=cursor2.fetchall()
+    print(result)
+    num_range=cursor2.rowcount
+    print(num_range)
+    orglist=['']
+    for i in range(num_range):
+        orglist.append(result[i][0])
+    orglist.remove('')
+    print(orglist)
+    orglist_not_repeat=list(set(orglist))  ## 去重
+    orgname_num=len(orglist_not_repeat)
+    print(orgname_num)
+
+    org_name_check={"ORG_CODE": " "}
+    org_name=['']
+    for i in range(orgname_num):
+        org_name_check["ORG_CODE"]=orglist_not_repeat[i]
+        print(org_name_check["ORG_CODE"])
+        try:
+            cursor2.execute(
+                'select ORG_NAME from OLE_DB.SYS_ORG  where ORG_CODE=:ORG_CODE'
+                , org_name_check
+            )
+        except cx_Oracle.DatabaseError as e:
+            res = {"status": "400", "msg": "No Data", "data": "null"}
+            return json.dumps(res)
+        result=cursor2.fetchall()
+        org_name.append(str(result[0][0]))
+    org_name.remove('')
+    print(org_name)
+    data_to_send = {"status": "400", "msg": "No User", "data": "null"}
+    data_to_send["status"]="200"
+    data_to_send["msg"]="ORG names"
+    data_to_send["data"]=org_name
+    return  json.dumps(data_to_send,ensure_ascii=False)
 def logindb(request):
 
     data =json.loads(request.body)
