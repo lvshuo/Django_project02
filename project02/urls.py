@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from DataServer.views import logindb ,dbreadrest,getdata,gettoken,getlist
+from DataServer.views import logindb ,dbreadrest,getdata,gettoken,getefficiency,getdatadetail
 from DataServer import views
 
 
@@ -26,6 +26,6 @@ urlpatterns = [
     path('dbreadrest/', dbreadrest.as_view()),
     path('getdata/',getdata.as_view()),
     path('gettoken/',views.gettoken),
-    path('getlist/',getlist.as_view()),
-
+    path('getefficiency/',getefficiency.as_view()),
+    path('getdatadetail/',getdatadetail.as_view()),
 ]
