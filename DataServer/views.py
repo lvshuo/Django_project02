@@ -166,16 +166,18 @@ def get_efficiency_data(request):
     data_get_orgnames_list["AREA_NAME"]=data_json["AREA_NAME"]
 
     org_name=get_project_list(data_get_orgnames_list)
-
+    print(org_name)
     for i in range(len(org_name)):
         data_to_check_effiency["ORG_NAME"]=org_name[i]
         efficencys.append(logindb(data_to_check_effiency))
+    efficencys.remove('')
     print(efficencys)
+    print(org_name+efficencys)
     data_to_send["status"] = "200"
     data_to_send["msg"] = "Data is ready"
-    data_to_send["data"] = efficencys
+    data_to_send["data"] = org_name+efficencys
 
-    return json.dumps(data_to_send)
+    return json.dumps(data_to_send, ensure_ascii = False)
 
 def get_data_detail(request):
     data_json = json.loads(request.body)
@@ -313,6 +315,8 @@ def get_project_list(request):
     orglist.remove('')
     print(orglist)
     orglist_not_repeat=list(set(orglist))  ## 去重
+    orglist_not_repeat.sort()
+    print(orglist_not_repeat)
     orgname_num=len(orglist_not_repeat)
     print(orgname_num)
 
