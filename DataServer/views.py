@@ -167,17 +167,23 @@ def get_efficiency_data(request):
 
     org_name=get_project_list(data_get_orgnames_list)
     print(org_name)
-    for i in range(len(org_name)):
-        data_to_check_effiency["ORG_NAME"]=org_name[i]
-        efficencys.append(logindb(data_to_check_effiency))
-    efficencys.remove('')
-    print(efficencys)
-    print(org_name+efficencys)
-    data_to_send["status"] = "200"
-    data_to_send["msg"] = "Data is ready"
-    data_to_send["data"] = org_name+efficencys
+    if org_name ==0 :
+        res = {"status": "400", "msg": "No Data", "data": "null"}
+        return json.dumps(res)
+    else:
 
-    return json.dumps(data_to_send, ensure_ascii = False)
+        for i in range(len(org_name)):
+
+            data_to_check_effiency["ORG_NAME"]=org_name[i]
+            efficencys.append(logindb(data_to_check_effiency))
+        efficencys.remove('')
+        print(efficencys)
+        print(org_name+efficencys)
+        data_to_send["status"] = "200"
+        data_to_send["msg"] = "Data is ready"
+        data_to_send["data"] = org_name+efficencys
+
+        return json.dumps(data_to_send, ensure_ascii = False)
 
 def get_data_detail(request):
     data_json = json.loads(request.body)
@@ -308,6 +314,11 @@ def get_project_list(request):
     result=cursor2.fetchall()
     print(result)
     num_range=cursor2.rowcount
+
+    if cursor2.rowcount == 0:
+        #res = {"status": "400", "msg": "No Data", "data": "null"}
+        return 0  # 当相应项目没有对应的园区的时候 返回0
+
     print(num_range)
     orglist=['']
     for i in range(num_range):
