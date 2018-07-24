@@ -165,6 +165,9 @@ def get_efficiency_data(request):
     data_get_orgnames_list["SERIES"]=data_json["SERIES"]
     data_get_orgnames_list["AREA_NAME"]=data_json["AREA_NAME"]
 
+    cursor2.execute("select * from OLE_DB.RPT_LINE_DAILY_L where   WORK_DATE =TO_DATE('2018-07-06', 'YYYY-MM-DD') ")
+    result = cursor2.fetchone()
+    print(result)
     org_name=get_project_list(data_get_orgnames_list)
     print(org_name)
     if org_name ==0 :
@@ -243,7 +246,8 @@ def get_data_detail(request):
     FAULT_LOSS_SUM = 0
     SUM_CT_SUM = 0
 
-    # print(result[0][28])
+    print(result)
+
     for i in range(cursor2.rowcount):
         CIRCLE_LOSS_SUM += result[i][15]  # 节怕损失
         LINE_END_LOSS_SUM += result[i][16]  # 收线损失
