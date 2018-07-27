@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from DataServer.views import logindb ,dbreadrest,getdata,gettoken,getefficiency,getdatadetail
 from DataServer import views
+from DataServer.userquery import userquery
 
 
 urlpatterns = [
@@ -28,4 +29,5 @@ urlpatterns = [
     path('gettoken/',views.gettoken),
     path('getefficiency/',getefficiency.as_view()),
     path('getdatadetail/',getdatadetail.as_view()),
+    path('userquery/',userquery.as_view()),
 ]

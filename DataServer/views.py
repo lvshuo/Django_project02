@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse ,HttpResponseRedirect
 import cx_Oracle
 import json
+import requests
 from django.db import models
 from DataServer.models import User
 
@@ -13,8 +14,12 @@ from rest_framework import exceptions
 import datetime
 from DataServer.database_login import database_login
 
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
 # Create your views here.
 
+url='http://10.10.31.113/WebService/BJYJY.asmx/Encrypt'  ## Password Webservice
 
 address = '10.10.31.115:1521/orcl'
 username = 'BJYJY'
@@ -149,7 +154,21 @@ class getdatadetail(APIView):
 
     def put(self, request, *args, **kwargs):
         return Response('PUT请求，响应内容')
+class userquery(APIView):
+    authentication_classes = [UserAuthview, ]
+    #permission_classes = []
 
+    def get(self, request, *args, **kwargs):
+        print(request.user)
+        print(request.auth)
+        return Response('GET请求，响应内容')
+
+    def post(self, request, *args, **kwargs):
+
+        return HttpResponse(loguserquery(request))
+
+    def put(self, request, *args, **kwargs):
+        return Response('PUT请求，响应内容')
 def get_efficiency_data(request):
 
     data_json = json.loads(request.body)
@@ -521,4 +540,42 @@ def login(req):
                  return HttpResponse(json.dumps(res))
 
    # return HttpResponse(' HELLO')
+def loguserquery(req):
+    data=json.loads(req.body)
+    print(data)
+    username_query={"USER_ID":""}
+    username_query["USER_ID"]=data["username"]
+    print(username_query)
+    password_json={"password":""}
+    password_json["password"]=data["password"]
+    s=json.dumps(password_json)
+    headers = {'Content-Type': 'application/json'}
+    password_encrpyt=requests.post(url,headers=headers,data=s)
+    password_encrpyt_temp=json.loads(password_encrpyt.text)
+    print(password_encrpyt_temp)
+    password_crpty=json.loads(password_encrpyt_temp["d"])
+    print(password_crpty["password"])
+    password_query={"PASS_WORD":" "}
+    password_query["PASS_WORD"]=password_crpty["password"]
+    print(password_query)
+
+    ## check the database if the user exits
+    try:
+        cursor2.execute(
+            "select *  from OLE_DB.SYSU_USER where USER_ID = :USER_ID"
+            , username_query
+        )
+
+    except cx_Oracle.DatabaseError as e:
+
+        res = {"status": "400", "msg": "No Data", "data": "null"}
+        return HttpResponse(json.dumps(res))
+
+    result_name = cursor2.fetchall()
+    print(cursor2.rowcount)
+    print(result_name[0][2])
+
+    ##check the password if correct
+
+
 
